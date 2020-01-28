@@ -1,0 +1,31 @@
+@startuml
+Leader <- Coordinator: Etterspør ressurser
+Leader -> Leader: Ny arbeider+
+
+group Oppgave+
+
+    Coordinator -> Worker: Utfør oppgave(args)
+    activate Worker
+    Worker -> Coordinator: Event:Start
+    Worker -> Logger: Event:Start
+    
+    alt Gjør oppgave
+    else 1 Error
+        Worker --[#red]> Coordinator: Event:TaskFail
+        Worker --[#red]> Logger: Event:TaskFail
+    else 2 Failure
+        Worker --[#orange]> Coordinator: Event:TaskFail
+        Worker --[#orange]> Logger: Event:TaskFail
+    else 3 Success 
+        Worker --[#green]> Coordinator: TaskSuccess
+        Worker --[#green]> Logger: TaskSuccess
+    end
+    Coordinator -> Worker: Hent resultat
+    Coordinator <- Worker: _result[0..]
+    Logger <- Worker: "Done"
+    destroy Worker
+    Coordinator -> Coordinator: Oppgave utført
+
+end
+
+@enduml
