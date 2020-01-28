@@ -1,4 +1,8 @@
 @startuml
+
+scale 800 width
+scale 1280 height
+
 Leader <- Coordinator: Etterspør ressurser
 Leader -> Leader: Ny arbeider+
 
